@@ -1,15 +1,26 @@
-import type { Metadata } from 'next'
-import { Inter } from 'next/font/google'
+import type { Metadata, Viewport } from 'next'
+import { Rubik } from 'next/font/google'
 import './globals.css'
 import ClientLayout from "./clientLayout"
 
-const inter = Inter({ subsets: ['latin'] })
+// Load Rubik font with Hebrew and Latin subsets
+const rubik = Rubik({ 
+  subsets: ['hebrew', 'latin'],
+  display: 'swap',
+  variable: '--font-rubik'
+})
 
 export const metadata: Metadata = {
   title: 'Safety Management System',
   description: 'Comprehensive safety management solution',
   generator: 'v0.dev',
-  viewport: 'width=device-width, initial-scale=1',
+}
+
+export const viewport: Viewport = {
+  width: 'device-width',
+  initialScale: 1,
+  maximumScale: 1,
+  userScalable: false,
 }
 
 export default function RootLayout({
@@ -19,7 +30,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="he" dir="rtl" suppressHydrationWarning>
-      <body className={inter.className}>
+      <body className={`${rubik.variable} font-sans min-h-screen bg-gray-50 text-gray-900`}>
         <ClientLayout>{children}</ClientLayout>
       </body>
     </html>
