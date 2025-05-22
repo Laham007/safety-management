@@ -1,13 +1,19 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
-  output: 'export',
-  trailingSlash: true,
+  reactStrictMode: true,
+  swcMinify: true,
   images: {
     unoptimized: true,
+    domains: ['safety-management.netlify.app'],
   },
   experimental: {
     appDir: true,
   },
+  output: 'standalone',
+  trailingSlash: true,
 };
 
-export default nextConfig;
+// For Netlify deployment
+const withTM = require('next-transpile-modules')([]);
+
+module.exports = withTM(nextConfig);

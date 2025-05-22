@@ -1,6 +1,7 @@
 [build]
   command = "npm install && npm run build"
-  publish = "out"
+  publish = ".next"
+  functions = ".next/functions"
 
 [build.environment]
   NODE_VERSION = "20.0.0"
@@ -8,11 +9,19 @@
   NEXT_TELEMETRY_DISABLED = "1"
   NETLIFY_NEXT_PLUGIN_SKIP = "true"
   NETLIFY_USE_YARN = "false"
+  NEXT_TARGET = "serverless"
 
-# Required for Single Page Applications (SPA)
+[[plugins]]
+  package = "@netlify/plugin-nextjs"
+
 [[redirects]]
   from = "/*"
   to = "/index.html"
+  status = 200
+
+[[redirects]]
+  from = "/_next/static/*"
+  to = "/_next/static/:splat"
   status = 200
   force = false
 
