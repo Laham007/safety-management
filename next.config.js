@@ -10,8 +10,8 @@ const nextConfig = {
   // Static export configuration
   output: 'export',
   basePath: '',
-  assetPrefix: process.env.NODE_ENV === 'production' ? '' : '',
-  trailingSlash: true,
+  assetPrefix: process.env.NODE_ENV === 'production' ? '' : undefined,
+  trailingSlash: false,
   
   // Disable ESLint during build
   eslint: {
@@ -27,6 +27,20 @@ const nextConfig = {
   images: {
     unoptimized: true, // Required for static export
     domains: ['localhost'],
+  },
+  
+  // Add this to handle CSS and static assets
+  experimental: {
+    appDir: true,
+  },
+  
+  // This is important for static exports
+  webpack(config) {
+    config.module.rules.push({
+      test: /\.css$/i,
+      use: ['style-loader', 'css-loader', 'postcss-loader'],
+    });
+    return config;
   },
   
   // Skip problematic pages during build
