@@ -39,8 +39,12 @@ export default function DashboardPage() {
         setUser(currentUser)
 
         // טעינת אירועים וביקורות
-        const incidentsData = await getIncidents()
-        const inspectionsData = await getInspections()
+        const incidentsResponse = await getIncidents()
+        const inspectionsResponse = await getInspections()
+
+        // בדיקה אם התשובה מכילה את השדה data
+        const incidentsData = incidentsResponse?.data || []
+        const inspectionsData = inspectionsResponse?.data || []
 
         setIncidents(incidentsData)
         setInspections(inspectionsData)

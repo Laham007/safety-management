@@ -12,6 +12,7 @@ import { Alert, AlertDescription } from "@/components/ui/alert"
 import Link from "next/link"
 import { useRouter } from "next/navigation"
 import { signUp } from "@/lib/supabase"
+import { supabase } from "@/lib/supabase"
 
 export default function RegisterPage() {
   const [name, setName] = useState("")
@@ -41,11 +42,25 @@ export default function RegisterPage() {
 
     try {
       // רישום באמצעות Supabase
-      const { data, error } = await signUp(email, password, {
-        name,
-        email,
-        role: "user",
-      })
+      const { data, error } = await signUp(email, password)
+      
+      // עדכון פרטי המשתמש הנוספים בטבלת הפרופיל
+      if (data?.user) {
+        const { error: profileError } = await supabase
+          .from('profiles')
+          .upsert({
+            id: data.user.id,
+            name,
+            email,
+            role: 'user',
+            updated_at: new Date().toISOString(),
+          })
+          
+        if (profileError) {
+          console.error('Error updating profile:', profileError)
+          throw new Error('שגיאה בשמירת פרטי הפרופיל')
+        }
+      }
 
       if (error) {
         throw new Error(error.message || "שגיאה ברישום")
